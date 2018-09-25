@@ -1,0 +1,151 @@
+<html>
+<head>
+
+<style>
+body {
+  background-color: black;
+  color: white;
+}
+h1 {
+  flex-basis: 100%;
+  color: white;
+  font-weight: 700;
+  margin: 10px;
+}
+header {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+  margin: auto;
+  text-align: center;
+
+}
+input {
+  width: 80%;
+  margin: auto;
+  height: 2em;
+  font-size: x-large;
+  margin-bottom: 35px;
+
+}
+div {
+
+  display: flex;
+  background-color: #1034cc;
+  text-align: center;
+  width: 80%;
+  border-radius: 5px;
+  margin: 4px 10%;
+  color: white;
+  font-size: x-large;
+  font-weight: 800;
+  padding: 5px;
+
+}
+img {
+  height: 60px;
+}
+span {
+  flex-basis: 16.5%;
+  background-color: #5485ed;
+  margin: 3px;
+  text-align: center;
+
+}
+</style>
+
+</head>
+<body>
+  <script>
+
+let countryArray = [];
+let header = document.createElement('header');
+            //header.innerHTML = 'Countries';
+            document.body.appendChild(header);
+            //menu.textContent = input;
+
+            h1Create('Countries');
+            createInput();
+let article = document.createElement("article");
+
+            document.body.appendChild(article);
+            //divCreate([1, 2, 3, 4, 5, 6]);
+function divCreate(a) {
+  let div = document.createElement('div');
+
+              div.classList.add("divs");
+              article.appendChild(div);
+
+            for (i=0; i<6; i++) {
+            let span = document.createElement('span');
+            span.innerHTML = a[i];
+            div.appendChild(span);}
+            }
+
+function loadJSON(callback) {
+
+    let json = new XMLHttpRequest();
+        json.overrideMimeType("application/json");
+    json.open('GET', 'http://restcountries.eu/rest/v2/all', false); // Replace 'my_data' with the path to your file
+    json.onreadystatechange = function () {
+          if (json.readyState == 4 && json.status == "200") {
+
+            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+            callback(json.responseText);
+          }
+    };
+    json.send(null);
+ }
+ divCreate(['Country', 'Capital', 'Population', 'Area', 'Language(s)', 'Flag']);
+
+ loadJSON(function(response) {
+  // Parse JSON string into object
+    let countries = JSON.parse(response);
+    //console.log(actual_JSON);
+    let keysArray = ['name', 'capital', 'population', 'area', 'languages', 'flag' ];
+    //for (i=0; i<actual_JSON.length;i++){
+    countries.forEach(country =>{
+      let {name, capital, population, area, languages, flag} = country;
+      countryArray.push([name, capital, population, area, languages, flag]);
+
+
+    });
+    //let {name, capital, population, area, languages, flag} = keysQuery;
+
+
+
+  //}
+});
+
+function h1Create(input) {
+                      let h1 = document.createElement('h1');
+                      h1.innerHTML = input + '<br>';
+                      header.appendChild(h1);
+                    }
+function createInput(){
+                            let name = document.createElement('input');
+                            //name.id = id;
+                            name.autofocus = true;
+                            name.setAttribute('placeholder','Enter search query...');
+                            name.setAttribute('oninput', 'refresh()');
+                            header.appendChild(name);}
+function start() {
+  for (j=0; j<250;j++) {
+    //console.log(j + ' ' + countryArray[j] + countryArray[j][4][0].name);
+  //if (countryArray[i][4].length==1) {
+  divCreate([countryArray[j][0],countryArray[j][1],countryArray[j][2],countryArray[j][3], countryArray[j][4][0].name, `<img alt='flag' src='${countryArray[j][5]}'/>`]);
+  //else if (countryArray[i][4].length==2)
+  //{
+  //divCreate([countryArray[i][0],countryArray[i][1],countryArray[i][2],countryArray[i][3], `${countryArray[i][4][0].name} ${countryArray[i][4][1].name}`, `<img alt='flag' src='${countryArray[i][5]}'/>`]);}
+  //else if (countryArray[i][4].length>2) {
+  //  divCreate([countryArray[i][0],countryArray[i][1],countryArray[i][2],countryArray[i][3], `${countryArray[i][4][0].name} ${countryArray[i][4][1].name} ${countryArray[i][4][2].name}`, `<img alt='flag' src='${countryArray[i][5]}'/>`]);}
+}
+}
+function refresh() {}
+console.log(countryArray);
+start();
+
+
+</script>
+</body>
+</html>
