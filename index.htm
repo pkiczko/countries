@@ -109,21 +109,7 @@
               name.setAttribute('placeholder','Enter search query...');
               name.setAttribute('oninput', 'refresh()');
               header.appendChild(name);
-  let article = document.createElement("article");
 
-              document.body.appendChild(article);
-              //divCreate([1, 2, 3, 4, 5, 6]);
-  function divCreate(a) {
-    let div = document.createElement('div');
-
-                div.classList.add("divs");
-                article.appendChild(div);
-
-              for (i=0; i<6; i++) {
-              let span = document.createElement('span');
-              span.innerHTML = a[i];
-              div.appendChild(span);}
-              }
 
   function loadJSON(callback) {
 
@@ -140,11 +126,13 @@
       json.send(null);
    }
    let title = ['Country', 'Capital', 'Population', 'Area', 'Language(s)', 'Flag'];
+   let nav = document.createElement('nav');
+        document.body.appendChild(nav);
    let divT = document.createElement('div');
 
                divT.id="titleDiv";
-               article.appendChild(divT);
                divT.style.backgroundColor = 'darkred';
+               nav.appendChild(divT);
              for (i=0; i<6; i++) {
              let span = document.createElement('span');
              span.classList = 'titleSpans';
@@ -154,6 +142,21 @@
              divT.appendChild(span);}
 
 
+    let main = document.createElement("main");
+
+                document.body.appendChild(main);
+                //divCreate([1, 2, 3, 4, 5, 6]);
+    function divCreate(a) {
+      let div = document.createElement('div');
+
+                  div.classList.add("divs");
+                  main.appendChild(div);
+
+                for (i=0; i<a.length; i++) {
+                let span = document.createElement('span');
+                span.innerHTML = a[i];
+                div.appendChild(span);}
+                }
    loadJSON(function(response) {
     // Parse JSON string into object
       let countries = JSON.parse(response);
@@ -196,11 +199,7 @@
   }
   function refresh() {
       endArray = [];
-      let toRemove = document.querySelectorAll('.divs');
-      for (y = 0; y < toRemove.length; y++)
-      {
-      article.removeChild(toRemove[y]);
-      }
+      purge();
       for (z=0; z<countryArray.length; z++){
       if (countryArray[z][0].toLowerCase().includes(name.value.toLowerCase())||countryArray[z][1].toLowerCase().includes(name.value.toLowerCase()) ) {
       if (countryArray[z][4].length==1) {
@@ -236,10 +235,10 @@
          }
        }}
   function sort(number) {
-      if (number === forgetMeNot){
+      if (number === forgetMeNot){  //if same button pressed consecutively
         endArray.reverse();
-        purge();
-        print(endArray);
+        purge();  //cleaning existing lines
+        print(endArray); //printing new lines
       }
       else {
      if (number === 2 || number === 3)
@@ -259,32 +258,29 @@
   //function from StackOverflow by Kerry Jones modified by Elias Zamaria
  //https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
  function purge() {
-   let toRemove = document.querySelectorAll('.divs');
-   for (y = 0; y < toRemove.length; y++)
-   {
-   article.removeChild(toRemove[y]);
-   }
+   main.innerHTML = ' ';
+
  }
   const numberWithCommas = (x) => {
     if (!x) {return 0}
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-  function compare(num) {
+    function compare(num) {      //for comparing strings
+        return function(o, p){
+          a = o[num];
+          b = p[num];
+       if (a< b) return -1;
+       if (a> b) return 1;
+       return 0;}
+     }
+    function compareNum(num) {  //for comparing numbers
       return function(o, p){
         a = o[num];
         b = p[num];
-     if (a< b) return -1;
-     if (a> b) return 1;
-     return 0;}
-   }
-  function compareNum(num) {
-    return function(o, p){
-      a = o[num];
-      b = p[num];
-    return (a-b);}
-  }
-  //console.log(countryArray);
-  start();
+      return (a-b);}
+    }
+    //console.log(countryArray);
+    start();
 
 
 </script>
